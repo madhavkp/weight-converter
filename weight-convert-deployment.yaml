@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: weight-convert-deployment
+  labels:
+    app: myapp-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: mypod-app
+  template:
+    metadata:
+      name: mypod
+      labels:
+        app: mypod-app
+    spec:
+      containers:
+       - name: weight-converter-container
+         image: madhavkp/wieght-converter-gcp-img
+         ports:
+          - containerPort: 8080
+         resources:
+           requests:
+             memory: 64Mi
+             cpu: 250m
+           limits:
+             memory: 128Mi
+         command: ["/bin/sh"]
+         args: ["-c", "/root/apache-tomcat-9.0.83/bin/startup.sh; while true; do sleep 1; done;"]
+
